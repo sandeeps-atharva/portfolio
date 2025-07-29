@@ -1,62 +1,101 @@
 <template>
   <section id="contact" class="contact">
-    <h2>Contact Me</h2>
-    <form @submit.prevent="submitForm">
-      <input v-model="name" type="text" placeholder="Your Name" required />
-      <input v-model="email" type="email" placeholder="Your Email" required />
-      <textarea
-        v-model="message"
-        placeholder="Your Message"
-        required
-      ></textarea>
-      <button type="submit">Send</button>
-    </form>
+    <div class="container">
+      <h2 class="section-title white-title">Get In Touch</h2>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3 class="contact-title">Let's Connect!</h3>
+          <div
+            class="contact-item"
+            v-for="item in contactItems"
+            :key="item.label"
+          >
+            <span class="contact-icon">{{ item.icon }}</span>
+            <span>{{ item.value }}</span>
+          </div>
+        </div>
+
+        <ContactForm />
+      </div>
+    </div>
   </section>
 </template>
 
 <script>
+import ContactForm from "./ContactForm.vue";
+
 export default {
+  name: "ContactComponent",
+  components: {
+    ContactForm,
+  },
   data() {
     return {
-      name: "",
-      email: "",
-      message: "",
+      contactItems: [
+        { icon: "📧", label: "Email", value: "sandeep@example.com" },
+        { icon: "📱", label: "Phone", value: "+91 98765 43210" },
+        { icon: "📍", label: "Location", value: "Ahmedabad, Gujarat" },
+        {
+          icon: "💼",
+          label: "LinkedIn",
+          value: "linkedin.com/in/sandeep-suthar",
+        },
+      ],
     };
-  },
-  methods: {
-    submitForm() {
-      alert(`Thanks ${this.name}, your message has been sent!`);
-      this.name = this.email = this.message = "";
-    },
   },
 };
 </script>
 
 <style scoped>
 .contact {
-  padding: 60px 20px;
+  padding: 100px 0;
+  background: var(--primary-gradient);
+  color: white;
   text-align: center;
 }
-form {
-  max-width: 500px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-input,
-textarea {
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-button {
-  background: #42b983;
+
+.white-title {
   color: white;
-  padding: 12px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-top: 3rem;
+  align-items: start;
+}
+
+.contact-info {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 3rem;
+}
+
+.contact-title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.contact-icon {
+  font-size: 1.5rem;
+}
+
+@media (max-width: 968px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
 }
 </style>

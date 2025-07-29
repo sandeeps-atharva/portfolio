@@ -1,34 +1,38 @@
 <template>
   <header class="header">
-    <div class="logo">SanDev</div>
-
-    <!-- Burger Menu Button (visible only on small screens) -->
-    <button class="menu-btn" @click="toggleMenu">☰</button>
-
-    <!-- Navigation Menu -->
-    <nav :class="{ open: isMenuOpen }">
-      <ul>
-        <li v-for="item in menuItems" :key="item.id">
-          <a @click="scrollToContact(item.ids)">{{ item.label }}</a>
-        </li>
-      </ul>
-    </nav>
+    <div class="nav-container">
+      <div class="logo">SanDev</div>
+      <nav>
+        <ul class="nav-menu" :class="{ active: isMenuOpen }">
+          <li v-for="(link, index) in navLinks" :key="index">
+            <a
+              href="javascript:void(0)"
+              class="nav-link"
+              @click="scrollToSection(link.target)"
+            >
+              {{ link.text }}
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <button class="menu-toggle" @click="toggleMenu">☰</button>
+    </div>
   </header>
 </template>
 
 <script>
 export default {
   name: "HeaderComponent",
-
   data() {
     return {
       isMenuOpen: false,
-      menuItems: [
-        { id: 1, label: "Home", href: "#hero", ids: "home" },
-        { id: 2, label: "About", href: "#about", ids: "about" },
-        { id: 3, label: "Skills", href: "#skills", ids: "skill" },
-        { id: 4, label: "Projects", href: "#projects", ids: "project" },
-        { id: 5, label: "Contact", href: "#contact", ids: "contact" },
+      navLinks: [
+        { text: "Home", target: "hero" },
+        { text: "About", target: "about" },
+        { text: "Skills", target: "skills" },
+        { text: "Experience", target: "experience" },
+        { text: "Projects", target: "projects" },
+        { text: "Contact", target: "contact" },
       ],
     };
   },
@@ -36,9 +40,15 @@ export default {
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
     },
-
-    scrollToContact(x) {
-      document.getElementById(`${x}`).scrollIntoView({ behavior: "smooth" });
+    closeMenu() {
+      this.isMenuOpen = false;
+    },
+    scrollToSection(id) {
+      const section = document.getElementById(id);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+        this.closeMenu(); // close menu on mobile after click
+      }
     },
   },
 };
@@ -46,74 +56,95 @@ export default {
 
 <style scoped>
 .header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 1rem 0;
+  transition: all 0.3s ease;
+}
+.nav-menu.active {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 70px; /* adjust based on your header height */
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  width: 100%;
+  padding: 1rem;
+  gap: 1.5rem;
+  z-index: 999;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #42b983;
-  padding: 20px;
-  color: white;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  padding: 0 2rem;
 }
 
 .logo {
-  font-weight: bold;
-  font-size: 1.5em;
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Burger Button */
-.menu-btn {
+.nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+}
+
+.nav-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-gradient);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.menu-toggle {
   display: none;
   background: none;
   border: none;
-  color: white;
-  font-size: 26px;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
-/* Nav styles */
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 16px;
-  padding: 0;
-  margin: 0;
-}
+@media (max-width: 968px) {
+  .nav-menu {
+    display: none;
+  }
 
-nav a {
-  color: white;
-  text-decoration: none;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
-/* Responsive for Mobile */
-@media (max-width: 768px) {
-  .menu-btn {
+  .menu-toggle {
     display: block;
   }
 
-  nav {
-    position: absolute;
-    top: 70px;
-    right: 20px;
-    background: #2d9062;
-    border-radius: 8px;
-    padding: 10px;
-    display: none;
-    flex-direction: column;
-  }
-
-  nav.open {
-    display: flex;
-  }
-
-  nav ul {
-    flex-direction: column;
-    gap: 10px;
+  .nav-container {
+    padding: 0 1rem;
   }
 }
 </style>

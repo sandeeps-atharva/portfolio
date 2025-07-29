@@ -1,39 +1,59 @@
 <template>
-  <section id="project" class="projects">
-    <h2>Projects</h2>
-    <div class="project-list">
-      <div
-        class="project-card"
-        v-for="(project, index) in projects"
-        :key="index"
-      >
-        <h3>{{ project.title }}</h3>
-        <p>{{ project.description }}</p>
-        <a :href="project.link" target="_blank">View Project</a>
+  <section id="projects" class="projects">
+    <div class="container">
+      <h2 class="section-title">Featured Projects</h2>
+      <div class="projects-grid">
+        <ProjectCard
+          v-for="project in projects"
+          :key="project.title"
+          :title="project.title"
+          :tech="project.tech"
+          :description="project.description"
+          :features="project.features"
+        />
       </div>
     </div>
   </section>
 </template>
 
 <script>
+import ProjectCard from "./ProjectCard.vue";
+
 export default {
+  name: "ProjectComponent",
+  components: {
+    ProjectCard,
+  },
   data() {
     return {
       projects: [
         {
-          title: "Todo App",
-          description: "A Vue + Firebase todo list app.",
-          link: "#",
+          title: "Zulu8 Shopify App",
+          tech: "Shopify API • React.js • Node.js • Express.js",
+          description:
+            "A comprehensive discount application that boosts sales through strategic upsell messaging and advanced pricing strategies.",
+          features: [
+            "Quantity-based discounts (Buy 2 Get 5% Off)",
+            "Amount-based discounts (Spend $50 Get 5% Off)",
+            "BOGO functionality with multiple options",
+            "Customizable widgets for quantity breaks",
+            "Multi-language support for global accessibility",
+            "Seamless integration with existing discount codes",
+          ],
         },
         {
-          title: "Portfolio Site",
-          description: "Personal website built with Vue.",
-          link: "#",
-        },
-        {
-          title: "Weather App",
-          description: "Weather data via OpenWeatherMap API.",
-          link: "#",
+          title: "Earth's Splendor E-commerce",
+          tech: "Next.js • TakeShape CMS • Shopify • REST APIs",
+          description:
+            "A responsive e-commerce website built with Next.js, featuring optimal performance and SEO optimization.",
+          features: [
+            "Server-side rendering with Next.js",
+            "Content management with TakeShape CMS",
+            "Shopify integration for e-commerce functionality",
+            "Responsive design for all devices",
+            "SEO optimized pages",
+            "Fast loading performance",
+          ],
         },
       ],
     };
@@ -43,25 +63,20 @@ export default {
 
 <style scoped>
 .projects {
-  padding: 60px 20px;
-  text-align: center;
+  padding: 100px 0;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
 }
-.project-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
 }
-.project-card {
-  width: 280px;
-  background: white;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-}
-a {
-  color: #42b983;
-  text-decoration: none;
-  font-weight: bold;
+
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
