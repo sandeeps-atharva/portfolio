@@ -11,8 +11,13 @@
 <script>
 export default {
   data() {
-    return { name: "San", HeroText: "A Passionate Vue.js Developer" };
+    return {
+      name: "Sandeep",
+      HeroText:
+        "Turning caffeine into code & bugs into features since forever ☕💻",
+    };
   },
+
   methods: {
     scrollToContact() {
       document.getElementById("contact").scrollIntoView({ behavior: "smooth" });
