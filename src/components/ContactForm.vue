@@ -72,32 +72,40 @@ export default {
       this.isSubmitting = true;
       this.submitMessage = "";
 
-      // Simulate form submission
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+      const { name, email, subject, message } = this.form;
 
-        // Reset form
-        this.form = {
-          name: "",
-          email: "",
-          subject: "",
-          message: "",
-        };
+      // Format WhatsApp message
+      const whatsappText = `
+    *New Contact Message*%0A
+    👤 *Name:* ${name}%0A
+    📧 *Email:* ${email}%0A
+    📝 *Subject:* ${subject}%0A
+    💬 *Message:* ${message}
+  `.trim();
 
-        this.submitMessage =
-          "Message sent successfully! I'll get back to you soon.";
-        this.submitStatus = "success";
+      const phone = "917665769959"; // your WhatsApp number (NO + or leading 0)
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(
+        whatsappText
+      )}`;
 
-        // Clear message after 5 seconds
-        setTimeout(() => {
-          this.submitMessage = "";
-        }, 5000);
-      } catch (error) {
-        this.submitMessage = "Failed to send message. Please try again.";
-        this.submitStatus = "error";
-      } finally {
-        this.isSubmitting = false;
-      }
+      // Open WhatsApp
+      window.open(url, "_blank");
+
+      // Reset form
+      this.form = {
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      };
+
+      this.submitMessage = "WhatsApp opened. Please hit Send!";
+      this.submitStatus = "success";
+      this.isSubmitting = false;
+
+      setTimeout(() => {
+        this.submitMessage = "";
+      }, 5000);
     },
   },
 };
